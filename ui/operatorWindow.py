@@ -111,7 +111,6 @@ class OperatorWindow(QMainWindow):
 
         footer.addStretch()
         footer.addWidget(resetBtn)
-        footer.addWidget(self.createFooterLabel())
 
         # Botão Encerrar
         exitBtn = QPushButton("❌ Encerrar")
