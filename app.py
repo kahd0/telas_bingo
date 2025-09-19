@@ -1,11 +1,12 @@
 import sys
+from typing import NoReturn  # Add for type hinting
 from PySide6.QtWidgets import QApplication
 from model.bingoModel import BingoModel
 from ui.operatorWindow import OperatorWindow
 from ui.publicWindow import PublicWindow
 
 
-def main():
+def main() -> NoReturn:
     app = QApplication(sys.argv)
     model = BingoModel()
 
@@ -22,7 +23,11 @@ def main():
 
     operatorWindow.showMaximized()
     publicWindow.showFullScreen()
-    sys.exit(app.exec())
+
+    try:
+        sys.exit(app.exec())
+    except Exception as e:
+        print(f"Application exited with error: {e}")
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+from typing import Optional  # Add for type hinting
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
@@ -90,7 +91,7 @@ class PublicWindow(QMainWindow):
         for col in range(10):
             self.grid.setColumnStretch(col, 1)
 
-        self.stoneWidgets = {}
+        self.stoneWidgets: dict[int, StoneWidget] = {}
         for col in range(10):
             for row in range(10):
                 number = col * 10 + row + 1
@@ -202,17 +203,19 @@ class PublicWindow(QMainWindow):
         # 🖥️ Configuração para múltiplas telas (projetor)
         self.setupProjectorDisplay()
 
-    def showStone(self, number):
-        stone = self.stoneWidgets[number]
-        stone.setVisible(True)
-        stone.setSelected(True)
-        self.updateLastList()
+    def showStone(self, number: int):
+        stone = self.stoneWidgets.get(number)
+        if stone:
+            stone.setVisible(True)
+            stone.setSelected(True)
+            self.updateLastList()
 
-    def unshowStone(self, number):
-        stone = self.stoneWidgets[number]
-        stone.setVisible(True)
-        stone.setSelected(False, wasUnselected=True)
-        self.updateLastList()
+    def unshowStone(self, number: int):
+        stone = self.stoneWidgets.get(number)
+        if stone:
+            stone.setVisible(True)
+            stone.setSelected(False, wasUnselected=True)
+            self.updateLastList()
 
     def resetView(self):
         for stone in self.stoneWidgets.values():

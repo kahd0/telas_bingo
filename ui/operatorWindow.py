@@ -14,14 +14,16 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QFont
+from typing import Optional  # Add for type hinting
 import os
 from ui.widgets.stoneWidget import StoneWidget
 from ui.widgets.headerWidget import HeaderWidget
 from utils.phoneLink import openWhatsappLink
+from ui.publicWindow import PublicWindow  # Import for type hinting
 
 
 class OperatorWindow(QMainWindow):
-    def __init__(self, model, publicWindow=None):
+    def __init__(self, model, publicWindow: Optional[PublicWindow] = None):
         super().__init__()
         self.setWindowIcon(QIcon(os.path.join("assets", "logo.ico")))
         self.setWindowTitle("🎯 Bingo da Igreja - Painel do Operador")
@@ -67,7 +69,7 @@ class OperatorWindow(QMainWindow):
         for col in range(10):
             self.grid.setColumnStretch(col, 1)
 
-        self.stoneWidgets = {}
+        self.stoneWidgets: dict[int, StoneWidget] = {}
         for col in range(10):
             for row in range(10):
                 number = col * 10 + row + 1
@@ -160,15 +162,9 @@ class OperatorWindow(QMainWindow):
         )
         publicBtn.clicked.connect(self.openPublicWindow)
 
-        # Botão Reiniciar (já existia)
-        resetBtn = QPushButton("🔄 Reiniciar")
-        resetBtn.setStyleSheet(""" ... """)  # mantém seu estilo
-        resetBtn.clicked.connect(self.resetGame)
-
         footer.addStretch()
         footer.addWidget(exitBtn)
         footer.addWidget(publicBtn)
-        footer.addWidget(resetBtn)
         footer.addWidget(self.createFooterLabel())
 
         layout.addLayout(footer)
@@ -200,10 +196,11 @@ class OperatorWindow(QMainWindow):
         )
         return label
 
-    def handleClick(self, number):
-        stone = self.stoneWidgets[number]
+    def handleClick(self, number: int):
+        stone = self.stoneWidgets.get(number)
+        if not stone:
+            return  # Safeguard against invalid numbers
         if self.model.stones[number]["selected"]:
-            # Dialog de confirmação melhorado
             reply = self.showStyledMessageBox(
                 "⚠️ Confirmação",
                 f"Deseja desmarcar a pedra {stone.displayNumber()}?",
@@ -243,7 +240,7 @@ class OperatorWindow(QMainWindow):
             stone.reset()
 
     def openPublicWindow(self):
-        if self.publicWindow is not None:
+        if self.publicWindow:
             self.publicWindow.show()
             self.publicWindow.raise_()
             self.publicWindow.activateWindow()

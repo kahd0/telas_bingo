@@ -1,17 +1,17 @@
 from PySide6.QtWidgets import QPushButton
-from PySide6.QtGui import QPainter, QPen, QBrush, QColor, QFont
+from PySide6.QtGui import QPainter, QPen, QBrush, QColor, QFont, QPaintEvent  # Add missing import for type hinting
 from PySide6.QtCore import Qt, Signal
 
 
 class StoneWidget(QPushButton):
     clicked = Signal()
 
-    def __init__(self, number, publicView=False):
+    def __init__(self, number: int, publicView: bool = False):
         super().__init__()
-        self.number = number
-        self.publicView = publicView
-        self.selected = False
-        self.wasUnselected = False
+        self.number: int = number
+        self.publicView: bool = publicView
+        self.selected: bool = False
+        self.wasUnselected: bool = False
         self.setMinimumSize(70, 70)
 
     def emitClicked(self):
@@ -21,7 +21,9 @@ class StoneWidget(QPushButton):
     def displayNumber(self):
         return f"{self.number if self.number < 100 else '00'}"
 
-    def paintEvent(self, event):
+    def paintEvent(self, event: QPaintEvent):
+        if self.width() <= 0 or self.height() <= 0:
+            return  # Prevent drawing if dimensions are invalid
         diameter = min(self.width(), self.height())
         qp = QPainter(self)
         qp.setRenderHint(QPainter.Antialiasing)
