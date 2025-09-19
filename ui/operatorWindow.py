@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QGridLayout, QPushButton, QVBoxLayout, QLabel, 
-    QMessageBox, QHBoxLayout, QFrame, QSpacerItem, QSizePolicy
+    QMessageBox, QHBoxLayout, QFrame, QSpacerItem, QSizePolicy, QApplication
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QFont
@@ -11,7 +11,7 @@ from utils.phoneLink import openWhatsappLink
 
 
 class OperatorWindow(QMainWindow):
-    def __init__(self, model):
+    def __init__(self, model, publicWindow=None):
         super().__init__()
         self.setWindowIcon(QIcon(os.path.join("assets", "logo.ico")))
         self.setWindowTitle("🎯 Bingo da Igreja - Painel do Operador")
@@ -27,6 +27,7 @@ class OperatorWindow(QMainWindow):
         """)
         
         self.model = model
+        self.publicWindow = publicWindow   # mantém referência para a tela do público
         central = QWidget()
         central.setStyleSheet("""
             QWidget {
@@ -91,6 +92,62 @@ class OperatorWindow(QMainWindow):
         resetBtn.clicked.connect(self.resetGame)
         
         footer.addStretch()
+        footer.addWidget(resetBtn)
+        footer.addWidget(self.createFooterLabel())
+        
+
+        # Botão Encerrar
+        exitBtn = QPushButton("❌ Encerrar")
+        exitBtn.setStyleSheet("""
+            QPushButton {
+                font-size: 14px;
+                font-weight: bold;
+                color: #ffffff;
+                background-color: #7f8c8d;
+                border: 2px solid #626e70;
+                border-radius: 6px;
+                padding: 10px 20px;
+                min-width: 120px;
+            }
+            QPushButton:hover {
+                background-color: #95a5a6;
+            }
+            QPushButton:pressed {
+                background-color: #626e70;
+            }
+        """)
+        exitBtn.clicked.connect(QApplication.quit)
+
+        # Botão Tela do Público
+        publicBtn = QPushButton("🖥️ Tela do Público")
+        publicBtn.setStyleSheet("""
+            QPushButton {
+                font-size: 14px;
+                font-weight: bold;
+                color: #ffffff;
+                background-color: #27ae60;
+                border: 2px solid #1e8449;
+                border-radius: 6px;
+                padding: 10px 20px;
+                min-width: 140px;
+            }
+            QPushButton:hover {
+                background-color: #2ecc71;
+            }
+            QPushButton:pressed {
+                background-color: #1e8449;
+            }
+        """)
+        publicBtn.clicked.connect(self.openPublicWindow)
+
+        # Botão Reiniciar (já existia)
+        resetBtn = QPushButton("🔄 Reiniciar")
+        resetBtn.setStyleSheet(""" ... """)  # mantém seu estilo
+        resetBtn.clicked.connect(self.resetGame)
+
+        footer.addStretch()
+        footer.addWidget(exitBtn)
+        footer.addWidget(publicBtn)
         footer.addWidget(resetBtn)
         footer.addWidget(self.createFooterLabel())
         
@@ -160,3 +217,14 @@ class OperatorWindow(QMainWindow):
     def resetView(self):
         for stone in self.stoneWidgets.values():
             stone.reset()
+
+    def openPublicWindow(self):
+        if self.publicWindow is not None:
+            self.publicWindow.show()
+            self.publicWindow.raise_()
+            self.publicWindow.activateWindow()
+        else:
+            QMessageBox.information(
+                self, "Tela do Público", 
+                "A tela do público não foi inicializada nesta sessão."
+            )
