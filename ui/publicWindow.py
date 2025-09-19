@@ -1,6 +1,13 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QGridLayout, QVBoxLayout, QLabel, QHBoxLayout,
-    QSpacerItem, QSizePolicy, QApplication
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QVBoxLayout,
+    QLabel,
+    QHBoxLayout,
+    QSpacerItem,
+    QSizePolicy,
+    QApplication,
 )
 from PySide6.QtCore import Qt
 from ui.widgets.stoneWidget import StoneWidget
@@ -10,7 +17,8 @@ from ui.widgets.headerWidget import HeaderWidget
 class PublicWindow(QMainWindow):
     def __init__(self, model):
         super().__init__()
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QMainWindow {
                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                     stop: 0 #f8f9fa, stop: 1 #e9ecef);
@@ -20,26 +28,30 @@ class PublicWindow(QMainWindow):
                 color: #2c3e50;
                 font-family: 'Segoe UI', Arial, sans-serif;
             }
-        """)
+        """
+        )
         self.setWindowTitle("🎯 Bingo da Igreja - Painel Público")
         self.model = model
-        
+
         central = QWidget()
-        central.setStyleSheet("""
+        central.setStyleSheet(
+            """
             QWidget {
                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                     stop: 0 #ffffff, stop: 0.5 #f8f9fa, stop: 1 #e9ecef);
                 border-radius: 15px;
                 margin: 10px;
             }
-        """)
+        """
+        )
         layout = QHBoxLayout(central)
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(30)
 
         # 🔹 Grade de pedras
         gridContainer = QWidget()
-        gridContainer.setStyleSheet("""
+        gridContainer.setStyleSheet(
+            """
             QWidget {
                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                     stop: 0 #ffffff, stop: 1 #f8f9fa);
@@ -47,7 +59,8 @@ class PublicWindow(QMainWindow):
                 border-radius: 20px;
                 padding: 15px;
             }
-        """)
+        """
+        )
         gridLayout = QVBoxLayout(gridContainer)
         gridLayout.setContentsMargins(15, 15, 15, 15)
         gridLayout.setSpacing(10)
@@ -57,14 +70,16 @@ class PublicWindow(QMainWindow):
 
         # Container para a grade com sombra
         gridWidget = QWidget()
-        gridWidget.setStyleSheet("""
+        gridWidget.setStyleSheet(
+            """
             QWidget {
                 background-color: #ffffff;
                 border: 2px solid #bdc3c7;
                 border-radius: 15px;
                 padding: 10px;
             }
-        """)
+        """
+        )
         gridWidgetLayout = QVBoxLayout(gridWidget)
         gridWidgetLayout.setContentsMargins(10, 10, 10, 10)
 
@@ -88,14 +103,17 @@ class PublicWindow(QMainWindow):
 
         gridWidgetLayout.addLayout(self.grid)
         gridLayout.addWidget(gridWidget)
-        
+
         # 🔹 empurra o grid um pouco para cima
-        gridLayout.addSpacerItem(QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        gridLayout.addSpacerItem(
+            QSpacerItem(0, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        )
         layout.addWidget(gridContainer)
 
         # 🔹 Caixa lateral de últimas pedras
         self.lastColumn = QWidget()
-        self.lastColumn.setStyleSheet("""
+        self.lastColumn.setStyleSheet(
+            """
             QWidget {
                 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                     stop: 0 #ffffff, stop: 1 #f1c40f);
@@ -103,16 +121,18 @@ class PublicWindow(QMainWindow):
                 border-radius: 20px;
                 padding: 20px;
             }
-        """)
+        """
+        )
         self.lastColumnLayout = QVBoxLayout(self.lastColumn)
         self.lastColumnLayout.setAlignment(Qt.AlignTop)
         self.lastColumnLayout.setContentsMargins(15, 15, 15, 15)
         self.lastColumnLayout.setSpacing(15)
-        
+
         # Título da seção
         titleLabel = QLabel("🎲 ÚLTIMAS PEDRAS")
         titleLabel.setAlignment(Qt.AlignCenter)
-        titleLabel.setStyleSheet("""
+        titleLabel.setStyleSheet(
+            """
             QLabel {
                 font-size: 20px;
                 font-weight: bold;
@@ -123,15 +143,17 @@ class PublicWindow(QMainWindow):
                 padding: 8px;
                 margin-bottom: 10px;
             }
-        """)
+        """
+        )
         self.lastColumnLayout.addWidget(titleLabel)
-        
+
         self.lastStoneLabels = []
         for i in range(5):  # até 5 últimas pedras
             lbl = QLabel("")
             lbl.setAlignment(Qt.AlignCenter)
             if i == 0:  # primeira pedra (mais recente)
-                lbl.setStyleSheet("""
+                lbl.setStyleSheet(
+                    """
                     QLabel {
                         font-size: 120px;
                         font-weight: bold;
@@ -143,9 +165,11 @@ class PublicWindow(QMainWindow):
                         padding: 15px;
                         margin: 5px;
                     }
-                """)
+                """
+                )
             else:
-                lbl.setStyleSheet(f"""
+                lbl.setStyleSheet(
+                    f"""
                     QLabel {{
                         font-size: {80 - i*10}px;
                         font-weight: bold;
@@ -158,22 +182,23 @@ class PublicWindow(QMainWindow):
                         margin: 3px;
                         opacity: {1.0 - i*0.15};
                     }}
-                """)
+                """
+                )
             self.lastColumnLayout.addWidget(lbl)
             self.lastStoneLabels.append(lbl)
-            
+
         # Espaçador para empurrar tudo para cima
         self.lastColumnLayout.addSpacerItem(
             QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.Expanding)
         )
-        
+
         layout.addWidget(self.lastColumn)
 
         self.setCentralWidget(central)
-        
+
         # Define tamanho mínimo da janela
         self.setMinimumSize(1200, 800)
-        
+
         # 🖥️ Configuração para múltiplas telas (projetor)
         self.setupProjectorDisplay()
 

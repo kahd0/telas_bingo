@@ -4,6 +4,7 @@ from model.bingoModel import BingoModel
 from ui.operatorWindow import OperatorWindow
 from ui.publicWindow import PublicWindow
 
+
 def main():
     app = QApplication(sys.argv)
     model = BingoModel()
@@ -22,6 +23,7 @@ def main():
     operatorWindow.showMaximized()
     publicWindow.showFullScreen()
     sys.exit(app.exec())
+
 
 if __name__ == "__main__":
     main()

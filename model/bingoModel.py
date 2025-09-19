@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
+
 class BingoModel(QObject):
     stoneSelected = Signal(int)
     stoneUnselected = Signal(int)
@@ -7,7 +8,9 @@ class BingoModel(QObject):
 
     def __init__(self):
         super().__init__()
-        self.stones = {i: {"selected": False, "wasUnselected": False} for i in range(1, 101)}
+        self.stones = {
+            i: {"selected": False, "wasUnselected": False} for i in range(1, 101)
+        }
         self.lastStones = []
 
     def selectStone(self, number):

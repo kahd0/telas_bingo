@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QGridLayout, QLabel
 from PySide6.QtCore import Qt
 
+
 class HeaderWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -12,10 +13,12 @@ class HeaderWidget(QWidget):
         for i, letter in enumerate(headers):
             label = QLabel(letter)
             label.setAlignment(Qt.AlignCenter)
-            label.setStyleSheet("""
+            label.setStyleSheet(
+                """
                 font-size: 72px;
                 font-weight: bold;
-            """)
+            """
+            )
             layout.addWidget(label, 0, i * 2, 1, 2)
 
             # 🔹 garante que cada coluna tenha o mesmo peso do grid

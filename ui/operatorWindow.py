@@ -1,6 +1,16 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QGridLayout, QPushButton, QVBoxLayout, QLabel, 
-    QMessageBox, QHBoxLayout, QFrame, QSpacerItem, QSizePolicy, QApplication
+    QMainWindow,
+    QWidget,
+    QGridLayout,
+    QPushButton,
+    QVBoxLayout,
+    QLabel,
+    QMessageBox,
+    QHBoxLayout,
+    QFrame,
+    QSpacerItem,
+    QSizePolicy,
+    QApplication,
 )
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QFont
@@ -15,7 +25,8 @@ class OperatorWindow(QMainWindow):
         super().__init__()
         self.setWindowIcon(QIcon(os.path.join("assets", "logo.ico")))
         self.setWindowTitle("🎯 Bingo da Igreja - Painel do Operador")
-        self.setStyleSheet("""
+        self.setStyleSheet(
+            """
             QMainWindow {
                 background-color: #f5f5f5;
             }
@@ -24,19 +35,22 @@ class OperatorWindow(QMainWindow):
                 color: #333333;
                 font-family: 'Segoe UI', Arial, sans-serif;
             }
-        """)
-        
+        """
+        )
+
         self.model = model
-        self.publicWindow = publicWindow   # mantém referência para a tela do público
+        self.publicWindow = publicWindow  # mantém referência para a tela do público
         central = QWidget()
-        central.setStyleSheet("""
+        central.setStyleSheet(
+            """
             QWidget {
                 background-color: #ffffff;
                 border: 1px solid #ddd;
                 border-radius: 8px;
                 margin: 5px;
             }
-        """)
+        """
+        )
         layout = QVBoxLayout(central)
         layout.setContentsMargins(15, 15, 15, 15)
         layout.setSpacing(15)
@@ -48,7 +62,7 @@ class OperatorWindow(QMainWindow):
         # Grade de pedras simples
         self.grid = QGridLayout()
         self.grid.setSpacing(2)
-        
+
         # Garante largura uniforme das colunas
         for col in range(10):
             self.grid.setColumnStretch(col, 1)
@@ -60,7 +74,9 @@ class OperatorWindow(QMainWindow):
                 if number == 100:
                     number = 100  # mantém "00" como último
                 stone = StoneWidget(number)
-                stone.clicked.connect(lambda checked=False, num=number: self.handleClick(num))
+                stone.clicked.connect(
+                    lambda checked=False, num=number: self.handleClick(num)
+                )
                 self.grid.addWidget(stone, row, col)
                 self.stoneWidgets[number] = stone
 
@@ -68,10 +84,11 @@ class OperatorWindow(QMainWindow):
 
         # Footer simples
         footer = QHBoxLayout()
-        
+
         # Botão de reiniciar simples
         resetBtn = QPushButton("🔄 Reiniciar")
-        resetBtn.setStyleSheet("""
+        resetBtn.setStyleSheet(
+            """
             QPushButton {
                 font-size: 14px;
                 font-weight: bold;
@@ -88,17 +105,18 @@ class OperatorWindow(QMainWindow):
             QPushButton:pressed {
                 background-color: #c0392b;
             }
-        """)
+        """
+        )
         resetBtn.clicked.connect(self.resetGame)
-        
+
         footer.addStretch()
         footer.addWidget(resetBtn)
         footer.addWidget(self.createFooterLabel())
-        
 
         # Botão Encerrar
         exitBtn = QPushButton("❌ Encerrar")
-        exitBtn.setStyleSheet("""
+        exitBtn.setStyleSheet(
+            """
             QPushButton {
                 font-size: 14px;
                 font-weight: bold;
@@ -115,12 +133,14 @@ class OperatorWindow(QMainWindow):
             QPushButton:pressed {
                 background-color: #626e70;
             }
-        """)
+        """
+        )
         exitBtn.clicked.connect(QApplication.quit)
 
         # Botão Tela do Público
         publicBtn = QPushButton("🖥️ Tela do Público")
-        publicBtn.setStyleSheet("""
+        publicBtn.setStyleSheet(
+            """
             QPushButton {
                 font-size: 14px;
                 font-weight: bold;
@@ -137,7 +157,8 @@ class OperatorWindow(QMainWindow):
             QPushButton:pressed {
                 background-color: #1e8449;
             }
-        """)
+        """
+        )
         publicBtn.clicked.connect(self.openPublicWindow)
 
         # Botão Reiniciar (já existia)
@@ -150,30 +171,34 @@ class OperatorWindow(QMainWindow):
         footer.addWidget(publicBtn)
         footer.addWidget(resetBtn)
         footer.addWidget(self.createFooterLabel())
-        
+
         layout.addLayout(footer)
 
         self.setCentralWidget(central)
-        
+
         # Define tamanho mínimo
         self.setMinimumSize(900, 650)
-        
+
         # Conecta os sinais
         self.model.stoneSelected.connect(self.updateStone)
         self.model.stoneUnselected.connect(self.updateStoneUnselected)
         self.model.resetDone.connect(self.resetView)
 
     def createFooterLabel(self):
-        label = QLabel('<a href="https://wa.me/5548998160074" style="color: #3498db; text-decoration: none;">📱 Desenvolvido por Ricardo Vieira (48) 99816-0074</a>')
+        label = QLabel(
+            '<a href="https://wa.me/5548998160074" style="color: #3498db; text-decoration: none;">📱 Desenvolvido por Ricardo Vieira (48) 99816-0074</a>'
+        )
         label.setOpenExternalLinks(True)
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        label.setStyleSheet("""
+        label.setStyleSheet(
+            """
             QLabel {
                 font-size: 12px;
                 color: #666;
                 padding: 5px;
             }
-        """)
+        """
+        )
         return label
 
     def handleClick(self, number):
@@ -181,9 +206,9 @@ class OperatorWindow(QMainWindow):
         if self.model.stones[number]["selected"]:
             # Dialog de confirmação melhorado
             reply = self.showStyledMessageBox(
-                "⚠️ Confirmação", 
+                "⚠️ Confirmação",
                 f"Deseja desmarcar a pedra {stone.displayNumber()}?",
-                QMessageBox.Question
+                QMessageBox.Question,
             )
             if reply == QMessageBox.Yes:
                 self.model.unselectStone(number)
@@ -192,9 +217,9 @@ class OperatorWindow(QMainWindow):
 
     def resetGame(self):
         reply = self.showStyledMessageBox(
-            "🔄 Reiniciar Jogo", 
+            "🔄 Reiniciar Jogo",
             "Deseja desmarcar todas as pedras e iniciar uma nova partida?",
-            QMessageBox.Question
+            QMessageBox.Question,
         )
         if reply == QMessageBox.Yes:
             self.model.resetAll()
@@ -225,6 +250,7 @@ class OperatorWindow(QMainWindow):
             self.publicWindow.activateWindow()
         else:
             QMessageBox.information(
-                self, "Tela do Público", 
-                "A tela do público não foi inicializada nesta sessão."
+                self,
+                "Tela do Público",
+                "A tela do público não foi inicializada nesta sessão.",
             )
