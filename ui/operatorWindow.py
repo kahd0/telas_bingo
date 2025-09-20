@@ -207,7 +207,7 @@ class OperatorWindow(QMainWindow):
                 QMessageBox.Question,
             )
             if reply == QMessageBox.Yes:
-                self.model.unselectStone(number)
+                self.model.unselectStone(number)  # Chama o método para desmarcar
         else:
             self.model.selectStone(number)
 

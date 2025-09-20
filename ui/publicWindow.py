@@ -213,9 +213,8 @@ class PublicWindow(QMainWindow):
     def unshowStone(self, number: int):
         stone = self.stoneWidgets.get(number)
         if stone:
-            stone.setVisible(True)
-            stone.setSelected(False, wasUnselected=True)
-            self.updateLastList()
+            stone.setVisible(False)  # Esconde a pedra
+            self.updateLastList()  # Atualiza a lista de últimas pedras
 
     def resetView(self):
         for stone in self.stoneWidgets.values():

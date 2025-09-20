@@ -26,6 +26,8 @@ class BingoModel(QObject):
         if self.stones[number]["selected"]:
             self.stones[number]["selected"] = False
             self.stones[number]["wasUnselected"] = True
+            if number in self.lastStones:
+                self.lastStones.remove(number)  # Remove da lista de últimas pedras
             self.stoneUnselected.emit(number)
 
     def resetAll(self):
