@@ -27,7 +27,7 @@ jobs:
 
       - name: Criar executável
         run: |
-          pyinstaller --onefile --noconsole --name "ControleBingo_${{ github.ref_name }}" app.py
+          pyinstaller --onefile --noconsole --icon=assets/logo.ico --name "ControleBingo_${{ github.ref_name }}" app.py
 
       - name: Upload executável (artefato)
         uses: actions/upload-artifact@v4

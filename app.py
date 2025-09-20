@@ -1,6 +1,7 @@
 import sys
 from typing import NoReturn  # Add for type hinting
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon  # Add for setting application icon
 from model.bingoModel import BingoModel
 from ui.operatorWindow import OperatorWindow
 from ui.publicWindow import PublicWindow
@@ -8,6 +9,8 @@ from ui.publicWindow import PublicWindow
 
 def main() -> NoReturn:
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon("assets/logo.ico"))  # Define o ícone da aplicação
+
     model = BingoModel()
 
     # cria a tela pública primeiro

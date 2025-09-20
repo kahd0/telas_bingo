@@ -11,6 +11,7 @@ from PySide6.QtWidgets import (
     QApplication,
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon  # Import necessário para o ícone
 from ui.widgets.stoneWidget import StoneWidget
 from ui.widgets.headerWidget import HeaderWidget
 
@@ -18,6 +19,7 @@ from ui.widgets.headerWidget import HeaderWidget
 class PublicWindow(QMainWindow):
     def __init__(self, model):
         super().__init__()
+        self.setWindowIcon(QIcon("assets/logo.ico"))  # Define o ícone da janela
         self.setStyleSheet(
             """
             QMainWindow {

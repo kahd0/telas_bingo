@@ -25,7 +25,7 @@ from ui.publicWindow import PublicWindow  # Import for type hinting
 class OperatorWindow(QMainWindow):
     def __init__(self, model, publicWindow: Optional[PublicWindow] = None):
         super().__init__()
-        self.setWindowIcon(QIcon(os.path.join("assets", "logo.ico")))
+        self.setWindowIcon(QIcon("assets/logo.ico"))  # Define o ícone da janela
         self.setWindowTitle("🎯 Bingo da Igreja - Painel do Operador")
         self.setStyleSheet(
             """
