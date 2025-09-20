@@ -1,0 +1,53 @@
+name: Build Executable
+
+on:
+  push:
+    tags:
+      - "*"   # roda sempre que você criar uma tag (ex: 1.1, 1.2, v1.0, etc.)
+  workflow_dispatch: # permite rodar manualmente no GitHub Actions
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checar código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Criar executável
+        run: |
+          pyinstaller --onefile --noconsole --name "ControleBingo_${{ github.ref_name }}" app.py
+
+      - name: Upload executável (artefato)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ControleBingo
+          path: dist/ControleBingo_${{ github.ref_name }}.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar executável
+        uses: actions/download-artifact@v4
+        with:
+          name: ControleBingo
+          path: ./dist
+
+      - name: Criar Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./dist/ControleBingo_${{ github.ref_name }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
